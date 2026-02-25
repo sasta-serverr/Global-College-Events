@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global College Events</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ==================== BASE STYLES ==================== */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    /* layered animated background: subtle radial base + moving gradient overlay */
+    background: radial-gradient(circle at 20% 10%, rgba(239,228,211,0.9) 0%, rgba(246,241,232,0.95) 40%, rgba(246,241,232,1) 100%),
+                linear-gradient(120deg, rgba(191,169,128,0.06), rgba(200,180,150,0.04));
+    color: #2c2c2c;
+    animation: fadeIn 1.2s ease-in;
+}
+
+/* animated soft gradient overlay */
+.bg-gradient {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background: linear-gradient(60deg, rgba(223,200,170,0.08), rgba(210,190,160,0.06), rgba(240,230,215,0.04));
+    mix-blend-mode: overlay;
+    animation: floatGradient 12s ease-in-out infinite;
+}
+
+@keyframes floatGradient {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    50% { transform: translateY(-30px) rotate(3deg); opacity: 0.95; }
+    100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+/* large blurred blobs for depth */
+.decorative-blobs { position: fixed; inset: 0; z-index: -3; pointer-events: none; }
+.decorative-blobs .blob { position: absolute; filter: blur(36px) saturate(120%); opacity: 0.55; border-radius: 50%; transform: translate3d(0,0,0); }
+.decorative-blobs .b1 { width: 520px; height: 520px; left: -10%; top: -8%; background: radial-gradient(circle at 30% 30%, rgba(191,169,128,0.18), rgba(191,169,128,0.06)); }
+.decorative-blobs .b2 { width: 420px; height: 420px; right: -8%; top: 10%; background: radial-gradient(circle at 70% 30%, rgba(186,165,140,0.14), rgba(230,220,200,0.04)); }
+.decorative-blobs .b3 { width: 360px; height: 360px; left: 15%; bottom: -10%; background: radial-gradient(circle at 20% 80%, rgba(210,190,160,0.12), rgba(240,235,225,0.03)); }
+
+/* more varied floating shapes (overrides existing shapes to feel richer) */
+.background-shapes li { background: rgba(191,169,128,0.12); }
+.background-shapes li:nth-child(1) { left: 8%; width: 120px; height: 120px; animation-duration: 28s; opacity:0.9 }
+.background-shapes li:nth-child(2) { left: 22%; width: 36px; height: 36px; animation-duration: 14s; opacity:0.7 }
+.background-shapes li:nth-child(3) { left: 72%; width: 28px; height: 28px; animation-duration: 20s; opacity:0.65 }
+.background-shapes li:nth-child(4) { left: 45%; width: 90px; height: 90px; animation-duration: 22s; opacity:0.8 }
+.background-shapes li:nth-child(5) { left: 80%; width: 160px; height: 160px; animation-duration: 30s; opacity:0.6 }
+
+/* subtle diagonal stripe overlay for texture */
+.page-stripes { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 32px); mix-blend-mode: soft-light; }
+
+/* ==================== VIDEO BACKGROUND ==================== */
+.space-background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
+}
+
+/* ==================== NAVIGATION ==================== */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    z-index: 1000;
+}
+
+nav a {
+    text-decoration: none;
+    color: #d4a574;
+    transition: 0.3s;
+    position: relative;
+}
+
+nav a.active {
+    color: #bfa980;
+    font-weight: 500;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background: #bfa980;
+    transition: 0.3s;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero {
+    text-align: center;
+    padding: 80px 20px 40px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    margin: 0;
+    color: white;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #e8e8e8;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+
+/* ==================== STATS ==================== */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin: 40px 0 60px;
+}
+
+.stat { text-align: center; }
+
+.stat h3 {
+    font-size: 30px;
+    margin: 0;
+    color: #f0d9bc;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.stat p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #d8d8d8;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+
+/* ==================== FEATURED EVENTS ==================== */
+.featured-section {
+    margin-bottom: 60px;
+}
+
+.featured-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.event-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+    transition: 0.4s ease;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: center;
+    width: 280px;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+}
+
+/* ========== Event cards entrance & interaction animations ========== */
+.featured-grid.animate .event-card { opacity: 0; transform: translateY(18px) scale(0.98); }
+.featured-grid.animate .event-card.enter { animation: cardIn 600ms cubic-bezier(.2,.9,.2,1) forwards; }
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* stagger delays for up to 6 cards */
+.featured-grid.animate .event-card:nth-child(1).enter { animation-delay: 80ms; }
+.featured-grid.animate .event-card:nth-child(2).enter { animation-delay: 180ms; }
+.featured-grid.animate .event-card:nth-child(3).enter { animation-delay: 300ms; }
+.featured-grid.animate .event-card:nth-child(4).enter { animation-delay: 420ms; }
+.featured-grid.animate .event-card:nth-child(5).enter { animation-delay: 540ms; }
+.featured-grid.animate .event-card:nth-child(6).enter { animation-delay: 660ms; }
+
+/* subtle 3D tilt on pointer move */
+.event-card { will-change: transform; transform-style: preserve-3d; perspective: 800px; }
+.event-card.tilt { transition: transform 180ms ease-out; }
+
+/* event preview animation */
+.preview.show { animation: previewPop 360ms cubic-bezier(.2,.9,.2,1) both; }
+@keyframes previewPop {
+    from { opacity: 0; transform: translateY(8px) scale(0.995); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.event-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid #e8e0d2;
+    display: block;
+    transition: transform 0.6s ease; /* Smooth image transition */
+}
+
+/* CINEMATIC ZOOM EFFECT */
+.event-card:hover img {
+    transform: scale(1.1);
+}
+
+.event-card div {
+    padding: 20px;
+    font-weight: 500;
+    position: relative;
+    background: white;
+    z-index: 2;
+    color: #2c2c2c;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ==================== FORM CARDS ==================== */
+.container {
+    max-width: 850px;
+    margin: auto;
+    padding: 0 20px 80px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    padding: 60px;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+    transition: 0.4s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 35px 80px rgba(0,0,0,0.08);
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    color: #2c2c2c;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+select, input, textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 1px solid #e2d8c7;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: #bfa980;
+}
+
+/* ==================== SHIMMERING BUTTONS ==================== */
+button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(90deg, #bfa980, #d6c3a1);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(191, 169, 128, 0.4);
+    background: linear-gradient(90deg, #caba9d, #e3d2b3);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.portal-btns {
+    text-align: center; 
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.portal-btns button {
+    width: 200px;
+}
+
+/* ==================== PREVIEW & ALERTS ==================== */
+.preview {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 14px;
+    background: #faf7f2;
+    border: 1px solid #eee2cf;
+    display: none;
+}
+
+.preview h4 {
+    margin: 0 0 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+.success {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+    color: #8a8a8a;
+}
+
+/* ==================== FLOATING BACKGROUND SHAPES ==================== */
+.background-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    z-index: -1; 
+}
+
+.background-shapes li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(191, 169, 128, 0.15); 
+    animation: floatUp 25s linear infinite;
+    bottom: -150px;
+    border-radius: 50%; 
+}
+
+.background-shapes li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+.background-shapes li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+.background-shapes li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+.background-shapes li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+.background-shapes li:nth-child(5) { left: 65%; width: 120px; height: 120px; animation-delay: 0s; }
+
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+}
+
+/* ==================== SCROLL REVEAL CLASSES ==================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==================== MOBILE RESPONSIVENESS ==================== */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 38px; }
+    nav { gap: 15px; flex-wrap: wrap; }
+    .stats { gap: 30px; flex-direction: column; }
+    .featured-grid { flex-wrap: wrap; }
+    .container { padding: 0 10px 40px; }
+    .card { padding: 30px 20px; }
+    .portal-btns { flex-direction: column; align-items: center; }
+    .portal-btns button { width: 100%; max-width: 300px; }
+}
+
+/* ==================== CHATBOT WIDGET ==================== */
+.chat-toggle {
+    position: fixed;
+    left: 22px;
+    top: 72px;
+    z-index: 2000;
+}
+.chat-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 24px;
+    transition: all 0.3s ease;
+}
+.chat-button:hover {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: white;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+.chat-window {
+    position: fixed;
+    left: 22px;
+    top: 138px;
+    width: 340px;
+    max-height: 70vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.15);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+.chat-header {
+    padding: 12px 14px;
+    background: linear-gradient(90deg,#bfa980,#d6c3a1);
+    color: white;
+    font-weight: 600;
+}
+.chat-messages {
+    padding: 12px;
+    overflow: auto;
+    flex: 1 1 auto;
+}
+.chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+}
+.chat-input { flex: 1; padding: 10px; border-radius: 8px; border:1px solid #e2d8c7 }
+.msg { margin: 8px 0; display:block; max-width:85%; padding:10px; border-radius:10px }
+.msg.user { background:#eef7ff; margin-left:auto; }
+.msg.bot { background:#faf7f2; margin-right:auto; }
+.chip { display:inline-block; background:#f2efe9; padding:6px 8px; margin:6px 6px 0 0; border-radius:14px; cursor:pointer; font-size:13px }
+
+/* animated lists for chat results and popup event lists */
+.chat-list { list-style: none; padding: 0; margin: 6px 0 0 0; }
+.chat-list li { opacity: 0; transform: translateY(10px); padding:6px 8px; border-radius:8px; background: rgba(255,255,255,0.0); margin-bottom:6px }
+.chat-list li.show { animation: listIn 420ms cubic-bezier(.2,.9,.2,1) forwards; }
+@keyframes listIn { from { opacity:0; transform: translateY(10px) } to { opacity:1; transform: translateY(0) } }
+
+.leaflet-popup-content .popup-events { list-style:none; padding:0; margin:6px 0 0 0 }
+.leaflet-popup-content .popup-events li { opacity:0; transform: translateY(8px); margin-bottom:6px }
+.leaflet-popup-content .popup-events li.show { animation: listIn 380ms cubic-bezier(.2,.9,.2,1) forwards }
+
+/* Contact list styles and animation */
+.contact-container { padding: 22px; display:flex; flex-direction:column; align-items:center }
+.contact-list { list-style:none; padding:0; margin:12px 0 0 0; display:block; max-width:640px }
+.contact-list li { background: rgba(255,255,255,0.95); padding:12px 14px; border-radius:12px; margin:10px auto; width:100%; box-shadow: 0 8px 20px rgba(0,0,0,0.1); display:flex; align-items:center; gap:14px; opacity:0; transform: translateY(12px); }
+.contact-list li .avatar { width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:15px; background: linear-gradient(135deg,#bfa980,#d6c3a1); flex:0 0 56px }
+.contact-main { flex:1 1 auto; display:flex; flex-direction:column; }
+.contact-main .name { font-weight:700; color:#3a3a3a; font-family: 'Playfair Display', serif; }
+.contact-main .meta { color:#6b6b6b; font-size:13px; margin-top:6px }
+.contact-link { color:#6b6b6b; text-decoration:none }
+.contact-list li.show { animation: contactIn 420ms cubic-bezier(.2,.9,.2,1) forwards }
+@keyframes contactIn { from { opacity:0; transform: translateY(12px) } to { opacity:1; transform: translateY(0) } }
+.call-btn { background: linear-gradient(90deg,#bfa980,#d6c3a1); color: white; width:46px; height:46px; padding:0; border-radius:10px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px }
+
+@media (max-width:768px) { .contact-list li { padding:10px } }
+
+@media (max-width:480px) {
+    .chat-window { width: 92%; right: 4%; top: 72px; }
+}
+/* ==================== MAP WIDGET ==================== */
+.map-toggle { position: fixed; right: 22px; top: 72px; z-index: 2000; }
+.map-button { width: 56px; height: 56px; border-radius: 14px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:22px; transition: all .22s ease; position:relative; }
+.map-button:hover { background: rgba(0, 0, 0, 0.4); border-color: white; box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4); }
+.map-button:focus { outline: none; border-color: white; }
+.map-toggle .map-badge { position: absolute; right: 6px; top: -6px; width: 18px; height: 18px; border-radius: 10px; background: linear-gradient(90deg,#cba96e,#e6d3ae); box-shadow: 0 6px 14px rgba(201,170,128,0.18); display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff; font-weight:700; }
+.map-button.open { transform: scale(1.02) rotate(-2deg); background: rgba(0, 0, 0, 0.4); box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4); }
+.map-button .ring { position:absolute; inset: -6px; border-radius: 16px; pointer-events:none; opacity:0; transition: opacity .35s ease, transform .45s ease; }
+.map-button.open .ring { opacity:1; transform: scale(1.08); }
+@keyframes ping {
+    0% { box-shadow: 0 0 0 0 rgba(191,169,128,0.28); }
+    70% { box-shadow: 0 0 0 14px rgba(191,169,128,0.06); }
+ 100% { box-shadow: 0 0 0 0 rgba(191,169,128,0); }
+}
+.map-badge.pulse { animation: ping 1.6s infinite ease-out; }
+.map-window { position: fixed; right: 22px; top: 138px; width: 460px; height: 60vh; background: white; border-radius: 12px; box-shadow: 0 18px 50px rgba(0,0,0,0.15); z-index: 2000; display:none; overflow:hidden; }
+.map-header { padding: 8px 12px; background: #f6f1e8; border-bottom: 1px solid #eee; font-weight:600 }
+.map-body { height: calc(100% - 40px); }
+
+@media (max-width:480px) {
+    .map-window { width: 92%; right:4%; top: 72px; height: 50vh }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Video background -->
+<video autoplay loop muted playsinline class="space-background-video">
+  <source src="Video_Generation_with_Background_Addition.mp4" type="video/mp4">
+</video>
+
+<ul class="background-shapes">
+    <li></li><li></li><li></li><li></li><li></li>
+</ul>
+
+<!-- Decorative animated gradient and soft blobs for nicer background depth -->
+<div class="bg-gradient"></div>
+<div class="decorative-blobs">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+</div>
+<div class="page-stripes"></div>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#explore">Explore</a>
+    <a href="#colleges">Colleges</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<!-- Chatbot widget -->
+<div class="chat-toggle">
+    <button class="chat-button" id="chatBtn" title="Ask the assistant">🤖</button>
+</div>
+
+<div class="chat-window" id="chatWindow" aria-hidden="true">
+    <div class="chat-header">Event Guide — Ask me about events, interests, or colleges</div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">Hi! I'm your Event Assistant. Try: <span class="chip" onclick="chatAsk('Show upcoming events')">Upcoming events</span> <span class="chip" onclick="chatAsk('I like AI and Robotics')">AI / Robotics</span> <span class="chip" onclick="chatAsk('Find events for business students')">Business</span></div>
+    </div>
+    <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" placeholder="Type your question...">
+        <button class="chat-button" id="sendChat">Go</button>
+    </div>
+    </div>
+
+<!-- Map toggle (below chat button) -->
+<div class="map-toggle">
+    <button class="map-button" id="mapBtn" title="Show event locations">
+        📍
+        <span class="ring"></span>
+    </button>
+    <span class="map-badge" id="mapBadge">•</span>
+</div>
+
+<div class="map-window" id="mapWindow" aria-hidden="true">
+    <div class="map-header">Event Locations (OpenStreetMap)</div>
+    <div class="map-body" id="mapBody"></div>
+</div>
+
+<div class="hero reveal" id="home">
+    <h1>Global College Events</h1>
+    <p>Discover and Join Prestigious Events Across India</p>
+</div>
+
+<hr style="width:60%; border:0; height:1px; background:#e2d8c7; margin:20px auto 40px;">
+
+<div class="stats reveal" id="explore">
+    <div class="stat">
+        <h3 id="stateCount"></h3>
+        <p>States</p>
+    </div>
+    <div class="stat">
+        <h3 id="collegeCount"></h3>
+        <p>Colleges</p>
+    </div>
+    <div class="stat">
+        <h3 id="eventCount"></h3>
+        <p>Events</p>
+    </div>
+</div>
+
+<div class="featured-section reveal">
+    <h2 style="text-align:center;">Featured Events</h2>
+    <div class="featured-grid">
+        <div class="event-card">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80" alt="Techfest">
+            <div>Techfest – IIT Bombay</div>
+        </div>
+        <div class="event-card">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80" alt="Kshitij">
+            <div>Kshitij – IIT Kharagpur</div>
+        </div>
+        <div class="event-card">
+            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400&q=80" alt="Shaastra">
+            <div>Shaastra – IIT Madras</div>
+        </div>
+    </div>
+</div>
+
+<div class="container reveal" id="colleges">
+    <div class="portal-btns">
+        <button onclick="showStudent()">Student Portal</button>
+        <button onclick="showOrganizer()">Organizer Portal</button>
+    </div>
+
+    <div id="studentSection">
+        <div class="card">
+            <h2>Student Profile Registration</h2>
+            <input type="text" id="studentName" placeholder="Full Name">
+            <input type="email" id="studentEmail" placeholder="Email Address">
+            <input type="text" placeholder="Area of Interest (AI, Robotics, Business etc)">
+            <input type="text" placeholder="Participation History (Previous Events)">
+            <textarea placeholder="Short Bio"></textarea>
+
+            <select id="stateSelect" onchange="loadColleges()">
+                <option value="">Select State</option>
+            </select>
+            <select id="collegeSelect" onchange="loadEvents()">
+                <option value="">Select College</option>
+            </select>
+            <select id="eventSelect" onchange="showPreview()">
+                <option value="">Select Event</option>
+            </select>
+
+            <div class="preview" id="eventPreview">
+                <h4 id="previewTitle"></h4>
+                <p>Event details coming soon...</p>
+            </div>
+
+            <div class="success" id="successMessage"></div>
+
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <div id="organizerSection" style="display:none;">
+        <div class="card">
+            <h2>Event Organizer Registration</h2>
+            <input type="text" id="organizerName" placeholder="Organizer Full Name">
+            <select id="orgType">
+                <option value="">Organizer Type (College / Company / Individual)</option>
+                <option value="college">College</option>
+                <option value="company">Company</option>
+                <option value="individual">Individual</option>
+            </select>
+            <input type="text" id="collegeOrCompany" placeholder="College / Company Name">
+            <input type="text" id="organizerRole" placeholder="Organizer Role (e.g., Coordinator)">
+            <input type="text" id="department" placeholder="Department (if applicable)">
+            <input type="email" id="organizerEmail" placeholder="Email Address">
+            <input type="tel" id="organizerPhone" placeholder="Phone Number">
+            <input type="url" id="organizerWebsite" placeholder="Website (https://...)">
+
+            <hr style="border:0; height:1px; background:#e2d8c7; margin:12px 0;">
+
+            <input type="text" id="eventName" placeholder="Event Name">
+            <input type="date" id="eventDate">
+            <input type="text" id="eventVenue" placeholder="Venue">
+            <select id="eventCategory">
+                <option value="">Event Category</option>
+                <option>Technical</option>
+                <option>Cultural</option>
+                <option>Workshop</option>
+                <option>Business</option>
+                <option>Sports</option>
+            </select>
+            <textarea id="eventDescription" placeholder="Event Description"></textarea>
+            <input type="file" id="eventLogo" accept="image/*">
+
+            <div class="preview" id="organizerPreview"></div>
+            <div class="success" id="organizerMessage"></div>
+
+            <button onclick="publishEvent()">Publish Event</button>
+        </div>
+    </div>
+</div>
+
+<footer id="contact" class="reveal">
+    <div class="contact-container">
+        <h3 style="margin:0 0 8px; font-family:'Playfair Display', serif;">Contact Organizers</h3>
+        <ul class="contact-list" id="contactList">
+            <li>
+                <div class="avatar">SI</div>
+                <div class="contact-main"><div class="name">Samiul Islam</div><div class="meta"><a class="contact-link" href="tel:+917601868550">+91 76018 68550</a></div></div>
+                <button class="call-btn" aria-label="Call Samiul Islam" onclick="location.href='tel:+917601868550'">📞</button>
+            </li>
+            <li>
+                <div class="avatar">AD</div>
+                <div class="contact-main"><div class="name">Anshuman Das</div><div class="meta"><a class="contact-link" href="tel:+919749838744">+91 97498 38744</a></div></div>
+                <button class="call-btn" aria-label="Call Anshuman Das" onclick="location.href='tel:+919749838744'">📞</button>
+            </li>
+            <li>
+                <div class="avatar">SK</div>
+                <div class="contact-main"><div class="name">Soumadip Karfarma</div><div class="meta"><a class="contact-link" href="tel:+916297228485">+91 62972 28485</a></div></div>
+                <button class="call-btn" aria-label="Call Soumadip Karfarma" onclick="location.href='tel:+916297228485'">📞</button>
+            </li>
+            <li>
+                <div class="avatar">RD</div>
+                <div class="contact-main"><div class="name">Rajyeswari Dey</div><div class="meta"><a class="contact-link" href="tel:+919635366442">+91 96353 66442</a></div></div>
+                <button class="call-btn" aria-label="Call Rajyeswari Dey" onclick="location.href='tel:+919635366442'">📞</button>
+            </li>
+            <li>
+                <div class="avatar">MS</div>
+                <div class="contact-main"><div class="name">Madhuja Saha</div><div class="meta"><a class="contact-link" href="tel:+918889114666">+91 88891 14666</a></div></div>
+                <button class="call-btn" aria-label="Call Madhuja Saha" onclick="location.href='tel:+918889114666'">📞</button>
+            </li>
+        </ul>
+        <div style="text-align:center; margin-top:14px; color:#8a8a8a; font-size:13px;">© 2026 Global College Events Platform</div>
+    </div>
+</footer>
+
+<script>
+// Leaflet (OpenStreetMap) - load dynamically if not present
+if (!window.L) {
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.crossOrigin = '';
+    document.head.appendChild(s);
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    l.crossOrigin = '';
+    document.head.appendChild(l);
+}
+const data = {
+    "West Bengal": {
+        "IIT Kharagpur": ["Kshitij","Spring Fest","E-Summit","AI Conclave","Robotics League"],
+        "Jadavpur University": ["Sanskriti","Tech Fest JU","Coding League","Startup Meet","Research Expo"],
+        "Institute of Engineering & Management": ["Innovision","Hack IEM","Biz Summit","Cultural Carnival","AI Hackathon"],
+        "Techno India University": ["Tech Fiesta","Cultural Fest","Data Science Day","Entrepreneur Meet","Hack TIU"],
+        "Presidency University": ["Academic Conclave","Innovation Day","Cultural Week","AI Meet","Research Forum"]
+    },
+    "Maharashtra": {
+        "IIT Bombay": ["Techfest","Mood Indigo","E-Summit","Robotics War","AI Hack"],
+        "COEP": ["MindSpark","Regatta","Innovation Expo","Coding Clash","Business Summit"],
+        "VJTI": ["Technovanza","Pratibimb","Hackathon Pro","Tech Expo","Startup Carnival"],
+        "SPIT Mumbai": ["Code Storm","AI Fest","Cultural Vibes","Tech Meet","Robotics Expo"],
+        "MIT Pune": ["MIT Summit","Innovation Day","Hack MIT","Tech Carnival","Biz Fest"]
+    },
+    "Karnataka": {
+        "IISc Bangalore": ["Research Conclave","Science Expo","AI Symposium","Innovation Meet","Tech Summit"],
+        "NIT Surathkal": ["Engineer Fest","Cultural Night","Hack Arena","Robotics Showdown","E-Summit"],
+        "RVCE": ["8th Mile","Coding Fest","Tech Week","Biz Expo","AI Hackathon"],
+        "PES University": ["Hack PES","Cultural Fest","Tech Carnival","Startup Summit","Data Expo"],
+        "BMSCE": ["Innovation Fest","Code Rush","Tech Expo","Cultural Carnival","AI Meet"]
+    },
+    "Tamil Nadu": {
+        "IIT Madras": ["Shaastra","Saarang","E-Summit","Hack IITM","Robotics Fest"],
+        "Anna University": ["Kurukshetra","Tech Meet","Innovation Expo","AI Summit","Biz Carnival"],
+        "SRM University": ["SRM Hack","Cultural Fest","Data Conclave","Tech Expo","Startup Day"],
+        "VIT Vellore": ["GraVITas","Riviera","AI Fest","Code War","Innovation Meet"],
+        "PSG Tech": ["PSG Tech Fest","Cultural Week","AI Hack","Robotics Meet","Biz Expo"]
+    },
+    "Delhi": {
+        "IIT Delhi": ["Rendezvous","Tryst","Hack Delhi","AI Summit","Startup Expo"],
+        "DTU": ["Engifest","Tech Carnival","Innovation Fest","Robotics War","E-Summit"],
+        "NSUT": ["Moksha","Hack NSUT","Data Expo","Tech Conclave","Biz Summit"],
+        "Jamia Millia": ["Cultural Fest","Tech Week","AI Meet","Startup Forum","Research Expo"],
+        "Delhi University": ["Antardhvani","Tech Expo","Hack DU","Innovation Day","Biz Fest"]
+    },
+    "Uttar Pradesh": {
+        "IIT Kanpur": ["Techkriti","Antaragni","AI Hack","Robotics Expo","E-Summit"],
+        "MNNIT Allahabad": ["Culrav","Tech Fest","Hackathon UP","Startup Day","AI Conclave"],
+        "Amity University": ["Innovation Fest","Code Storm","Cultural Week","Biz Summit","Tech Expo"],
+        "BHU": ["Spandan","Tech Carnival","AI Summit","Research Meet","Startup Expo"],
+        "AKTU": ["Tech Meet","Hack AKTU","Cultural Fest","Data Expo","Biz Fest"]
+    },
+    "Telangana": {
+        "IIT Hyderabad": ["Elan","nVision","AI Expo","Hack TG","Innovation Summit"],
+        "NIT Warangal": ["Technozion","Spring Fest","AI Hack","Startup Meet","Robotics Show"],
+        "Osmania University": ["Cultural Fest","Tech Week","Innovation Expo","Biz Summit","Hack OU"],
+        "JNTU Hyderabad": ["Tech Carnival","AI Meet","Startup Fest","Research Expo","Code Rush"],
+        "IIIT Hyderabad": ["R&D Conclave","Hack IIIT","AI Fest","Robotics Expo","Biz Forum"]
+    },
+    "Gujarat": {
+        "DAIICT": ["Synapse","Coding Fest","AI Expo","Startup Meet","Cultural Day"],
+        "IIT Gandhinagar": ["Amalthea","Innovation Day","AI Summit","Hack IITGN","Research Expo"],
+        "Nirma University": ["Tech Fest","Cultural Carnival","Biz Summit","Code Clash","AI Meet"],
+        "MS University": ["Tech Week","Innovation Expo","Hack MSU","Startup Fest","Research Day"],
+        "Charusat": ["Tech Carnival","AI Hack","Biz Forum","Data Expo","Cultural Fest"]
+    },
+    "Rajasthan": {
+        "MNIT Jaipur": ["Blitzschlag","Hack RJ","Tech Expo","Biz Meet","Cultural Fest"],
+        "Poornima University": ["Innovation Fest","Code Rush","AI Summit","Startup Meet","Research Expo"],
+        "JECRC": ["Tech Carnival","Cultural Week","Hack JECRC","AI Expo","Biz Forum"],
+        "RTU": ["Tech Fest","Innovation Day","Startup Expo","AI Hack","Data Meet"],
+        "BITS Pilani": ["Oasis","Apogee","AI Summit","Hack BITS","Robotics Expo"]
+    },
+    "Kerala": {
+        "NIT Calicut": ["Tathva","Ragam","Hack Kerala","Tech Expo","Research Day"],
+        "CUSAT": ["Cultural Fest","Tech Carnival","AI Meet","Startup Summit","Data Expo"],
+        "Amrita University": ["Amrita Tech Fest","AI Summit","Innovation Day","Hack Amrita","Biz Expo"],
+        "KTU": ["Tech Week","Innovation Expo","Startup Fest","AI Hack","Cultural Meet"],
+        "Mar Baselios": ["Tech Carnival","Code Clash","AI Fest","Startup Day","Research Expo"]
+    }
+};
+
+// Map of generated dates for each event (keyed by state||college||event)
+const eventDates = {};
+
+function formatDate(d) {
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function generateEventDates() {
+    for (let state in data) {
+        for (let col in data[state]) {
+            for (let ev of data[state][col]) {
+                const key = state + '||' + col + '||' + ev;
+                if (!eventDates[key]) {
+                    const daysAhead = Math.floor(Math.random() * 180) + 1; // 1..180 days
+                    const d = new Date();
+                    d.setDate(d.getDate() + daysAhead);
+                    eventDates[key] = formatDate(d);
+                }
+            }
+        }
+    }
+}
+
+function showStudent() {
+    document.getElementById("studentSection").style.display = "block";
+    document.getElementById("organizerSection").style.display = "none";
+}
+
+function showOrganizer() {
+    document.getElementById("studentSection").style.display = "none";
+    document.getElementById("organizerSection").style.display = "block";
+}
+
+function updateStats() {
+    let stateTotal = Object.keys(data).length;
+    let collegeTotal = 0;
+    let eventTotal = 0;
+
+    for (let state in data) {
+        collegeTotal += Object.keys(data[state]).length;
+        for (let college in data[state]) {
+            eventTotal += data[state][college].length;
+        }
+    }
+
+    document.getElementById("stateCount").innerText = stateTotal + "+";
+    document.getElementById("collegeCount").innerText = collegeTotal + "+";
+    document.getElementById("eventCount").innerText = eventTotal + "+";
+}
+
+const sections = document.querySelectorAll("#home, #explore, #colleges, #contact");
+const navLinks = document.querySelectorAll("nav a");
+
+window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+            current = section.getAttribute("id");
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+        }
+    });
+});
+
+function loadColleges() {
+    const stateSelect = document.getElementById("stateSelect");
+    const collegeSelect = document.getElementById("collegeSelect");
+    const eventSelect = document.getElementById("eventSelect");
+    
+    collegeSelect.innerHTML = "<option value=''>Select College</option>";
+    eventSelect.innerHTML = "<option value=''>Select Event</option>";
+    
+    let selectedState = stateSelect.value;
+    if (selectedState) {
+        for (let college in data[selectedState]) {
+            let option = document.createElement("option");
+            option.value = college;
+            option.textContent = college;
+            collegeSelect.appendChild(option);
+        }
+    }
+}
+
+function loadEvents() {
+    const stateSelect = document.getElementById("stateSelect");
+    const collegeSelect = document.getElementById("collegeSelect");
+    const eventSelect = document.getElementById("eventSelect");
+    
+    eventSelect.innerHTML = "<option value=''>Select Event</option>";
+    
+    let state = stateSelect.value;
+    let college = collegeSelect.value;
+    
+    if (state && college) {
+        data[state][college].forEach(event => {
+            let option = document.createElement("option");
+            option.value = event;
+            option.textContent = event;
+            eventSelect.appendChild(option);
+        });
+    }
+}
+
+function showPreview() {
+    const eventSelect = document.getElementById("eventSelect");
+    let event = eventSelect.value;
+    if(event) {
+        document.getElementById("previewTitle").innerText = event;
+        document.getElementById("eventPreview").style.display = "block";
+    } else {
+        document.getElementById("eventPreview").style.display = "none";
+    }
+}
+
+function register() {
+    const stateSelect = document.getElementById("stateSelect");
+    const collegeSelect = document.getElementById("collegeSelect");
+    const eventSelect = document.getElementById("eventSelect");
+    
+    const name = document.getElementById("studentName").value.trim();
+    const email = document.getElementById("studentEmail").value.trim();
+    const msg = document.getElementById("successMessage");
+    
+    if (!name || !email) {
+        msg.innerText = "Please enter your Full Name and Email.";
+        msg.style.color = "red";
+        return; 
+    }
+
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!email.match(emailPattern)) {
+        msg.innerText = "Please enter a valid email address.";
+        msg.style.color = "red";
+        return;
+    }
+    
+    if(stateSelect.value && collegeSelect.value && eventSelect.value) {
+        msg.innerText = "Registration Successful! We've sent details to " + email + ".";
+        msg.style.color = "#4a7c59";
+    } else {
+        msg.innerText = "Please select a State, College, and Event.";
+        msg.style.color = "red";
+    }
+}
+
+function publishEvent() {
+    const name = document.getElementById('organizerName').value.trim();
+    const email = document.getElementById('organizerEmail').value.trim();
+    const eventName = document.getElementById('eventName').value.trim();
+    const msg = document.getElementById('organizerMessage');
+
+    if (!name || !email || !eventName) {
+        msg.innerText = "Please enter Organizer name, Email and Event name.";
+        msg.style.color = "red";
+        return;
+    }
+
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,}$/i;
+    if (!email.match(emailPattern)) {
+        msg.innerText = "Please enter a valid email address.";
+        msg.style.color = "red";
+        return;
+    }
+
+    const phone = document.getElementById('organizerPhone').value.trim();
+    const phonePattern = /^[0-9+()\-\s]{7,}$/;
+    if (phone && !phone.match(phonePattern)) {
+        msg.innerText = "Please enter a valid phone number.";
+        msg.style.color = "red";
+        return;
+    }
+
+    const orgType = document.getElementById('orgType').value;
+    const collegeCompany = document.getElementById('collegeOrCompany').value.trim();
+    const date = document.getElementById('eventDate').value;
+    const venue = document.getElementById('eventVenue').value.trim();
+    const category = document.getElementById('eventCategory').value;
+    const desc = document.getElementById('eventDescription').value.trim();
+
+    const preview = document.getElementById('organizerPreview');
+    preview.innerHTML = "<h4>Event Preview: " + escapeHtml(eventName) + "</h4>"
+        + "<p><strong>Organizer:</strong> " + escapeHtml(name) + (orgType ? ' (' + escapeHtml(orgType) + ')' : '') + (collegeCompany ? ' — ' + escapeHtml(collegeCompany) : '') + "</p>"
+        + "<p><strong>Date:</strong> " + (date || 'TBA') + "</p>"
+        + "<p><strong>Venue:</strong> " + (escapeHtml(venue) || 'TBA') + "</p>"
+        + "<p><strong>Category:</strong> " + (escapeHtml(category) || 'General') + "</p>"
+        + (desc ? '<p>' + escapeHtml(desc) + '</p>' : '');
+
+    preview.style.display = 'block';
+    msg.innerText = "Event published locally (demo) and shown in preview.";
+    msg.style.color = "#4a7c59";
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/\"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
+// SCROLL REVEAL LOGIC
+function reveal() {
+    let reveals = document.querySelectorAll(".reveal");
+    for (let i = 0; i < reveals.length; i++) {
+        let windowHeight = window.innerHeight;
+        let elementTop = reveals[i].getBoundingClientRect().top;
+        let elementVisible = 100; 
+
+        if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+            // if contact footer revealed, animate contact list
+            if (reveals[i].id === 'contact') animateContactList();
+        }
+    }
+}
+window.addEventListener("scroll", reveal);
+reveal(); 
+
+document.addEventListener("DOMContentLoaded", function() {
+    updateStats(); 
+    
+    const stateSelect = document.getElementById("stateSelect");
+    for (let state in data) {
+        let option = document.createElement("option");
+        option.value = state;
+        option.textContent = state;
+        stateSelect.appendChild(option);
+    }
+    generateEventDates();
+    setupChatbot();
+    initEventAnimations();
+    // animate contact list if footer already visible
+    setTimeout(()=>{ if (document.querySelector('#contact').classList.contains('active')) animateContactList(); }, 500);
+});
+
+function animateContactList() {
+    const lis = document.querySelectorAll('#contactList li');
+    lis.forEach((li, idx) => setTimeout(()=> li.classList.add('show'), 120 + idx * 120));
+}
+
+function initEventAnimations() {
+    // Trigger staggered entrance for featured event cards
+    const grid = document.querySelector('.featured-grid');
+    if (grid) {
+        grid.classList.add('animate');
+        const cards = Array.from(grid.querySelectorAll('.event-card'));
+        cards.forEach((c, i) => {
+            // add enter class so CSS animation runs with delays
+            c.classList.add('enter');
+            // setup pointer interactions for 3D tilt
+            c.addEventListener('mousemove', (ev) => {
+                const rect = c.getBoundingClientRect();
+                const px = (ev.clientX - rect.left) / rect.width;
+                const py = (ev.clientY - rect.top) / rect.height;
+                const rotateY = (px - 0.5) * 10; // -5..5 deg
+                const rotateX = (0.5 - py) * 8;  // -4..4 deg
+                c.classList.add('tilt');
+                c.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            c.addEventListener('mouseleave', () => {
+                c.classList.remove('tilt');
+                c.style.transform = '';
+            });
+        });
+    }
+
+    // animate preview when event selected
+    const eventSelect = document.getElementById('eventSelect');
+    if (eventSelect) {
+        eventSelect.addEventListener('change', () => {
+            const preview = document.getElementById('eventPreview');
+            if (preview && preview.style.display !== 'none') {
+                preview.classList.remove('show');
+                // trigger reflow to restart animation
+                void preview.offsetWidth;
+                preview.classList.add('show');
+            }
+        });
+    }
+}
+
+// ---------- Chatbot logic (simple local assistant using `data`) ----------
+function setupChatbot() {
+    const chatBtn = document.getElementById('chatBtn');
+    const chatWindow = document.getElementById('chatWindow');
+    const send = document.getElementById('sendChat');
+    const input = document.getElementById('chatInput');
+
+    chatBtn.addEventListener('click', () => {
+        const open = chatWindow.style.display === 'flex';
+        chatWindow.style.display = open ? 'none' : 'flex';
+        chatWindow.setAttribute('aria-hidden', open ? 'true' : 'false');
+        if (!open) { input.focus(); }
+    });
+
+    send.addEventListener('click', () => { handleUserMessage(); });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleUserMessage(); });
+}
+
+// ---------- Map widget (Leaflet + Nominatim geocoding) ----------
+function setupMapWidget() {
+    const mapBtn = document.getElementById('mapBtn');
+    const mapWindow = document.getElementById('mapWindow');
+    const mapBody = document.getElementById('mapBody');
+    let mapInstance = null;
+    let markersLayer = null;
+
+    mapBtn.addEventListener('click', () => {
+        const open = mapWindow.style.display === 'block';
+        mapWindow.style.display = open ? 'none' : 'block';
+        mapWindow.setAttribute('aria-hidden', open ? 'true' : 'false');
+        // toggle visual state on the button and badge
+        mapBtn.classList.toggle('open', !open);
+        const badge = document.getElementById('mapBadge');
+        if (badge) {
+            if (!open) badge.classList.add('pulse'); else badge.classList.remove('pulse');
+        }
+        if (!open) {
+            // initialize map when first opened
+            if (!mapInstance) {
+                mapInstance = L.map(mapBody).setView([22.0, 78.0], 5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(mapInstance);
+                markersLayer = L.layerGroup().addTo(mapInstance);
+                // add markers (geocode colleges)
+                geocodeAllColleges((marker) => { markersLayer.addLayer(marker); });
+                // animate popup list items when popup opens
+                mapInstance.on('popupopen', function(e){
+                    try {
+                        const popupEl = e.popup.getElement();
+                        if (!popupEl) return;
+                        const lis = popupEl.querySelectorAll('.popup-events li');
+                        lis.forEach((li, idx) => setTimeout(()=> li.classList.add('show'), 80 + idx * 80));
+                    } catch(err) {}
+                });
+            }
+            setTimeout(() => mapInstance.invalidateSize(), 300);
+        }
+    });
+}
+
+function geocodeAllColleges(onMarkerAdded) {
+    const colleges = [];
+    for (let state in data) {
+        for (let col in data[state]) {
+            colleges.push({ state, college: col });
+        }
+    }
+
+    // sequentially geocode to be polite to Nominatim
+    let i = 0;
+    function next() {
+        if (i >= colleges.length) return;
+        const item = colleges[i++];
+        geocodeCollege(item.college + ', ' + item.state).then(loc => {
+                if (loc) {
+                    const keyPrefix = item.state + '||' + item.college + '||';
+                    const events = data[item.state][item.college];
+                    const popupParts = [];
+                    for (let ev of events) {
+                        const key = keyPrefix + ev;
+                        const date = eventDates[key] ? ' — ' + eventDates[key] : '';
+                        popupParts.push({ text: ev + date });
+                    }
+                    const marker = L.marker([loc.lat, loc.lon]);
+                    // Build popup HTML with a list so we can animate items when popup opens
+                    const popupHtml = '<div class="popup-card"><strong>' + escapeHtml(item.college) + '</strong><ul class="popup-events">' + popupParts.map(p=> '<li>' + escapeHtml(p.text) + '</li>').join('') + '</ul></div>';
+                    marker.bindPopup(popupHtml);
+                    onMarkerAdded(marker);
+                }
+        }).catch(()=>{}).finally(() => {
+            // wait 450ms between requests
+            setTimeout(next, 450);
+        });
+    }
+    next();
+}
+
+function geocodeCollege(query) {
+    const cacheKey = 'geo::' + query;
+    try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) return Promise.resolve(JSON.parse(cached));
+    } catch(e) {}
+
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query);
+    return fetch(url, { headers: { 'Accept': 'application/json' } }).then(r => r.json()).then(arr => {
+        if (arr && arr.length) {
+            const top = { lat: parseFloat(arr[0].lat), lon: parseFloat(arr[0].lon) };
+            try { localStorage.setItem(cacheKey, JSON.stringify(top)); } catch(e) {}
+            return top;
+        }
+        return null;
+    }).catch(()=>null);
+}
+
+// ensure map widget is set up after DOM and Leaflet loaded
+function tryInitMapWidget() {
+    if (window.L) setupMapWidget();
+    else setTimeout(tryInitMapWidget, 300);
+}
+tryInitMapWidget();
+
+function chatAsk(text) {
+    document.getElementById('chatInput').value = text;
+    handleUserMessage();
+}
+
+function handleUserMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    appendChat('user', text);
+    input.value = '';
+    // simulate thinking
+    setTimeout(() => { botReply(text); }, 600 + Math.random()*600);
+}
+
+function appendChat(who, text) {
+    const container = document.getElementById('chatMessages');
+    const el = document.createElement('div');
+    el.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+
+    // If message contains multiple lines, render as an animated list
+    if (text.indexOf('\n') !== -1) {
+        const parts = text.split('\n').map(s => s.trim()).filter(Boolean);
+        if (parts.length > 1) {
+            const ul = document.createElement('ul');
+            ul.className = 'chat-list';
+            parts.forEach(p => {
+                const li = document.createElement('li');
+                li.innerHTML = escapeHtml(p);
+                ul.appendChild(li);
+            });
+            el.appendChild(ul);
+            container.appendChild(el);
+            // stagger show
+            const lis = ul.querySelectorAll('li');
+            lis.forEach((li, idx) => {
+                setTimeout(() => li.classList.add('show'), 80 + idx * 90);
+            });
+            container.scrollTop = container.scrollHeight;
+            return;
+        }
+    }
+
+    el.innerHTML = escapeHtml(text).replace(/\n/g,'<br>');
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+}
+
+function botReply(text) {
+    const lower = text.toLowerCase();
+
+    // Intent: upcoming events
+    if (lower.includes('upcoming') || lower.includes('today') || lower.includes('next')) {
+        const sample = getPopularEvents(6);
+        appendChat('bot', 'Here are some events you might like:\n' + sample.join('\n'));
+        return;
+    }
+
+    // Intent: interest-based suggestions
+    const interests = ['ai','robot','business','cultural','technical','hack','startup','data','coding'];
+    for (let it of interests) {
+        if (lower.includes(it)) {
+            const matches = findEventsByKeyword(it, 8);
+            if (matches.length) {
+                appendChat('bot', 'Found events related to "' + it + '":\n' + matches.join('\n'));
+                return;
+            }
+        }
+    }
+
+    // Intent: find specific event or college
+    if (lower.includes('college') || lower.includes('i want') || lower.includes('find')) {
+        const found = searchColleges(lower);
+        if (found.length) {
+            appendChat('bot', 'Matching colleges:\n' + found.join('\n'));
+            return;
+        }
+    }
+
+    // Fallback: offer guidance and quick suggestions
+    appendChat('bot', "I can help you find upcoming events, suggest events by interest (e.g. 'AI', 'Business'), or locate colleges. Try: 'Show upcoming events' or 'I like AI'.");
+}
+
+function getPopularEvents(limit) {
+    const results = [];
+    for (let state in data) {
+        for (let col in data[state]) {
+            for (let ev of data[state][col]) {
+                if (results.length < limit) {
+                    const key = state + '||' + col + '||' + ev;
+                    const date = eventDates[key] ? ' on ' + eventDates[key] : '';
+                    results.push(ev + ' — ' + col + ' (' + state + ')' + date);
+                }
+            }
+            if (results.length >= limit) break;
+        }
+        if (results.length >= limit) break;
+    }
+    return results;
+}
+
+function findEventsByKeyword(keyword, limit) {
+    const results = [];
+    for (let state in data) {
+        for (let col in data[state]) {
+            for (let ev of data[state][col]) {
+                if (ev.toLowerCase().includes(keyword)) {
+                    const key = state + '||' + col + '||' + ev;
+                    const date = eventDates[key] ? ' on ' + eventDates[key] : '';
+                    results.push(ev + ' — ' + col + ' (' + state + ')' + date);
+                    if (results.length >= limit) return results;
+                }
+            }
+        }
+    }
+    return results;
+}
+
+function searchColleges(q) {
+    const out = [];
+    for (let state in data) {
+        for (let col in data[state]) {
+            if (col.toLowerCase().includes(q)) out.push(col + ' — ' + state);
+        }
+    }
+    return out.slice(0,8);
+}
+</script>
+
+</body>
+</html>
